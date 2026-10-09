@@ -1,0 +1,437 @@
+{
+  "info": {
+    "_postman_id": "e4a56007-c953-4a08-94cf-673a90c1325e",
+    "name": "Test_Telecom",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57226837",
+    "_collection_link": "https://go.postman.co/collection/57226837-e4a56007-c953-4a08-94cf-673a90c1325e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Adduser",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Test for status code and status message 201 created\",()=>{\n    pm.expect(pm.response.code).to.eql(201);\n    pm.expect(pm.response.status).to.eql(\"Created\");\n\n})\nconst jsondata=pm.response.json();\npm.environment.set(\"token\",jsondata.token);\npm.environment.set(\"user_id\",jsondata.user._id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\"firstName\": \"Test\",\n\"lastName\": \"User\",\n\"email\": \"apiusr@fake.com\", \n\"password\": \"myPassword\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Base_URI}}/users",
+          "host": [
+            "{{Base_URI}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get user Profile",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const jsondata=pm.response.json();\n\npm.test(\"status code and status message 200 ok\",()=>{\n    pm.expect(pm.response.code).to.eql(200);\n\n    pm.expect(pm.response.status).to.contain(\"OK\");\n});\n\npm.test(\"Response ID matches the created ID\", () => {\n    pm.expect(String(jsondata._id)).to.eql(pm.environment.get(\"user_id\"));\n});\n\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{Base_URI}}/users/me",
+          "host": [
+            "{{Base_URI}}"
+          ],
+          "path": [
+            "users",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const jsondata=pm.response.json();\n\npm.test(\"Validate for status code and message 200 OK\",()=>\n{\n    pm.expect(pm.response.code).to.eql(200);\n    pm.expect(pm.response.status).to.include(\"OK\");\n})\n\npm.test(\"validate the response time \",()=>{\n    pm.expect(pm.response.responseTime).to.below(2000);\n})\n\npm.test(\"validate the response meessage\",()=>{\n    pm.expect(String(jsondata._id)).to.eql(pm.environment.get(\"user_id\"));\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\"firstName\": \"Updated\", \n\"lastName\": \"Username\",\n\"email\": \"apiusr2@fake.com\",\n\"password\": \"myNewPassword\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Base_URI}}/users/me",
+          "host": [
+            "{{Base_URI}}"
+          ],
+          "path": [
+            "users",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Log In User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const jsondata=pm.response.json();\n\npm.test(\"Validate the status code \",()=>\n{\n    pm.expect(pm.response.code).to.eql(200);\n    pm.expect(pm.response.status).to.contain(\"OK\");\n})\npm.environment.set(\"token\",jsondata.token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"apiusr2@fake.com\",\n    \"password\": \"myNewPassword\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Base_URI}}/users/login",
+          "host": [
+            "{{Base_URI}}"
+          ],
+          "path": [
+            "users",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Contact",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const jsondata=pm.response.json();\n\npm.test(\"Validate for 201 Created\",()=>\n{\n    pm.expect(pm.response.code).to.eql(201)\n    pm.expect(pm.response.status).to.include(\"Created\");\n})\n\npm.environment.set(\"owner\",jsondata.owner);\npm.environment.set(\"contact_id\",jsondata._id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\"firstName\": \"John\",\n\"lastName\": \"Doe\",\n\"birthdate\": \"1970-01-01\", \n\"email\": \"jdoe@fake.com\", \n\"phone\": \"8005555555\",\n\"street1\": \"1 Main St.\", \n\"street2\": \"Apartment A\", \n\"city\": \"Anytown\",\n\"stateProvince\": \"KS\", \n\"postalCode\": \"12345\", \n\"country\": \"USA\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Base_URI}}/contacts",
+          "host": [
+            "{{Base_URI}}"
+          ],
+          "path": [
+            "contacts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Contact List",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const jsonData = pm.response.json();\n\npm.test(\"Validate for 200 OK\",()=>{\n    pm.expect(pm.response.code).to.eql(200);\n    pm.expect(pm.response.status).to.include(\"OK\");\n})\n\npm.test(\"owner id validation from response\",()=>{\n    pm.expect(jsonData).to.be.an('array');\n    pm.expect(jsonData.length).to.be.above(0);\n    jsonData.forEach((item) => {\n        pm.expect(item).to.have.property(\"owner\");\n        pm.expect(String(item.owner)).to.eql(\n            pm.environment.get(\"owner\")\n        );\n    });\n})\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{Base_URI}}/contacts",
+          "host": [
+            "{{Base_URI}}"
+          ],
+          "path": [
+            "contacts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Contact",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Validate status code 200 OK\",()=>{\n\n    pm.expect(pm.response.code).to.eql(200);\n\n    pm.expect(pm.response.status).to.include(\"OK\");\n\n});\n\npm.test(\"Validate response body\", () => {\n\n    let jsonData = pm.response.json();\n\n    pm.expect(jsonData).to.have.lengthOf(1);\n\n    pm.expect(jsonData[0]).to.have.property(\"_id\", pm.environment.get(\"contact_id\"));\n\n    pm.expect(jsonData[0]).to.have.property(\"owner\");\n    pm.expect(jsonData[0].owner).to.eql(pm.environment.get(\"owner\"));\n    \n\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{Base_URI}}/contacts/?_id={{_id}}",
+          "host": [
+            "{{Base_URI}}"
+          ],
+          "path": [
+            "contacts",
+            ""
+          ],
+          "query": [
+            {
+              "key": "_id",
+              "value": "{{_id}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Contact",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Response is 200 OK\", () => {\n    pm.expect(pm.response.code).to.eql(200);\n    pm.expect(pm.response.status).to.eql(\"OK\");\n});\n\npm.test(\"Contact email is updated\", () => {\n    const data = pm.response.json();\n    pm.expect(data.email).to.eql(\"amiller@fake.com\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\"firstName\": \"Amy\", \n\"lastName\": \"Miller\",\n\"birthdate\": \"1992-02-02\",\n\"email\": \"amiller@fake.com\", \n\"phone\": \"8005554242\",\n\"street1\": \"13 School St.\", \n\"street2\": \"Apt. 5\",\n\"city\": \"Washington\", \n\"stateProvince\": \"QC\",\n\"postalCode\": \"A1A1A1\", \n\"country\": \"Canada\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Base_URI}}/contacts/{{contact_id}}",
+          "host": [
+            "{{Base_URI}}"
+          ],
+          "path": [
+            "contacts",
+            "{{contact_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Contact",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Validate the status code\",()=>{\n\n    pm.expect(pm.response.code).to.eql(200);\n    pm.expect(pm.response.status).to.eql(\"OK\");\n});\n\npm.test(\"Validate the user name \",()=>{\n    const jsondata=pm.response.json();\n    const data =JSON.parse(pm.request.body.raw);\n    pm.expect(jsondata.firstName).to.eql(data.firstName);\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\"firstName\": \"Anna\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Base_URI}}/contacts/{{contact_id}}",
+          "host": [
+            "{{Base_URI}}"
+          ],
+          "path": [
+            "contacts",
+            "{{contact_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Logout User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status code and status message 200 ok\",()=>{\n    pm.expect(pm.response.code).to.eql(200);\n\n    pm.expect(pm.response.status).to.contain(\"OK\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{Base_URI}}/users/logout",
+          "host": [
+            "{{Base_URI}}"
+          ],
+          "path": [
+            "users",
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Valid status code 200 OK\",()=>{\n    pm.expect(pm.response.code).to.eql(200);\n    pm.expect(pm.response.status).to.contain\n    (\"OK\");\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{Base_URI}}/users/me",
+          "host": [
+            "{{Base_URI}}"
+          ],
+          "path": [
+            "users",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
